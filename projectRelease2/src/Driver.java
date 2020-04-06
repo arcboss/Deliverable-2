@@ -109,7 +109,8 @@ public class Driver {
 			System.out.print("Enter a number to choose an option\n"
 					+"\n\t0 : Exit the program and write all assignments to the output file."
 					+"\n\t1 : Create all assignments randomly."
-					+"\n\t2 : Create all preferred assignments and randomly assign remaining assignments.");
+					+"\n\t2 : Create all preferred assignments and randomly assign remaining assignments."
+					+"\n\t3 : Create all assignments according to teachables.");
 			Scanner userOptions = new Scanner(System.in);
 			int userSelection = userOptions.nextInt();
 			
