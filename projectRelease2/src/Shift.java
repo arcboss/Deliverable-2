@@ -16,6 +16,8 @@ public class Shift implements Comparable<Shift>{
 	private String location;
 	/**This is to keep track of whether the absence has been filled.*/
 	private boolean scheduled;
+	/**This is to keep track of the absent teacher's specialties.*/
+	private String teachables;
 	
 	/**
 	 * This basic constructor parameterizes the Shift object.
@@ -49,6 +51,8 @@ public class Shift implements Comparable<Shift>{
 	public char getTime() { return time; };
 	public String getLocation() { return location; };
 	public boolean getScheduling() { return scheduled; };
+	public String getTeachables() { return teachables; };
+	public void setTeachables(String teachables) { this.teachables = teachables; };
 	
 	public void setToScheduled() {
 		scheduled = true;

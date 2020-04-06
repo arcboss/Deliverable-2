@@ -1,6 +1,6 @@
-first name,last name,email address,blacklist
-Terrence,Bogard,tbogard@unb.ca,Head Hall/Harbour View High School
-John,Doe,doe.john387@protonmail.com,
-Theodore,Campbell,tcampbe5@unb.ca,St. Mack's
-Abdur,Rahman Chowdury,abdursemail@gmail.com,
-Jack,Campbell,jacksemail@gmail.com,
+first name,last name,email address,blacklist,teachables
+Terrence,Bogard,tbogard@unb.ca,Head Hall/Harbour View High School,Math Physics
+John,Doe,doe.john387@protonmail.com,,History
+Theodore,Campbell,tcampbe5@unb.ca,St. Mack's,Music
+Abdur,Rahman Chowdury,abdursemail@gmail.com,,Math
+Jack,Campbell,jacksemail@gmail.com,,Physics

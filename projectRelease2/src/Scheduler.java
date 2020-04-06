@@ -93,6 +93,49 @@ public class Scheduler {
 	}//end selectPreferredTeacher
 	
 	/**
+	 * e: This method makes assignments for all teachers according to their teachables.
+	 * */
+	public void assignByTeachables() {
+		Teacher bestTeacher = new Teacher("", "", "", "");
+		Integer bestRank = 0;
+		int bestRankIndex = 0;
+		String teachablesString = "";
+		String curTeachable = "";
+		String empty = "";
+		Scanner teachableScan = new Scanner(teachablesString);
+		for(Shift curAbsence : absencesPool) {
+			teachablesString = curAbsence.getTeachables();
+			ArrayList<Integer> rankArray = new ArrayList<Integer>();
+			int rankIndex = 0;
+			for(Teacher curSubstitute : teacherPool) {
+				Integer rank = 0;
+				rankArray.add(rank);
+				while(teachableScan.hasNext()) {
+					curTeachable = teachableScan.next();
+					if(curSubstitute.getTeachables().contains(curTeachable)) {
+						rank++;
+						rankArray.set(rankIndex, rank);
+					}//end if
+				}//end while
+				if(rank>=bestRank) {
+					bestRank = rank;
+					bestRankIndex = rankIndex;
+				}//end if
+				rankIndex++;
+			}//end for
+			
+			bestTeacher = teacherPool.get(bestRankIndex);
+			bestTeacher.assign(curAbsence);
+			Assignment assignment = new Assignment(bestTeacher, curAbsence);
+			assignment.generateParameters();
+			assignments.add(new Assignment(bestTeacher, curAbsence));
+			curAbsence.setToScheduled();
+		}//end for
+		teachableScan.close();
+	}//end assignByTeachables
+	
+	
+	/**
 	 * This method generates a string from the fields of the object, overwriting the default toString method.
 	 * @return the fields of the teacher object, including all Shift objects in the shifts ArrayList.
 	 * */

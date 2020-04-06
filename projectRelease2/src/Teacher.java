@@ -19,6 +19,8 @@ public class Teacher {
 	private ArrayList<Shift> shifts;
 	/**These are the names of teachers who have this substitute as a preferred substitute.*/
 	private ArrayList<String> favourited;
+	/**These are the teachables associated with this substitute.*/
+	private String teachables;
 	
 	/**
 	 * This constructor parameterizes the Teacher object, and creates the shifts ArrayList.
@@ -42,6 +44,8 @@ public class Teacher {
 	public String getBlacklist() { return blacklist; };
 	public ArrayList<Shift> getShifts() { return shifts; };
 	public ArrayList<String> getPreferred() { return favourited; };
+	public String getTeachables() { return teachables; };
+	public void setTeachables(String teachables) { this.teachables = teachables; };
 	
 	public void setFirstName(String first) { this.first = first; };
 	public void setLastName(String last) { this.last = last; };

@@ -23,6 +23,7 @@ public class Driver {
 		String lastName = "DEFAULT";
 		String eMail = "default@nope.ca";
 		String blacklist = "default blacklist";
+		String teachables = "default teachables";
 		
 		String absencesFileName = "absences.csv";
 		String absentTeacherName = "DEFAULT";
@@ -56,7 +57,9 @@ public class Driver {
 				lastName = finder.get("last name");
 				eMail = finder.get("email address");
 				blacklist = finder.get("blacklist");
+				teachables = finder.get("teachables");
 				Teacher teach = new Teacher(firstName, lastName, eMail, blacklist);
+				teach.setTeachables(teachables);
 				master.addTeacher(teach);
 				//System.out.println("master:\n" + master.toString());
 			}//end for each
@@ -68,7 +71,9 @@ public class Driver {
 				date = finder.get("date");
 				time = finder.get("time").charAt(0);
 				location = finder.get("location");
+				teachables = finder.get("teachables");
 				Shift shift = new Shift(absentTeacherName, date, time, location);
+				shift.setTeachables(teachables);
 				master.addShift(shift);
 				System.out.println("Absence:\n" + shift.toString());
 			}//end for each
@@ -82,7 +87,6 @@ public class Driver {
 				date = finder.get("date");
 				time = finder.get("time").charAt(0);
 				teach.makeUnavailable(date, time);
-				//System.out.println("unavailablities:\n" + teach.toString());
 			}//end for each
 			
 			preferredCSVRead = new FileReader(preferredTeachersFileName);
@@ -93,7 +97,6 @@ public class Driver {
 				String subLastName = finder.get("substitute last name");
 				Teacher sub = master.findSub(subFirstName, subLastName);
 				sub.addAsPreffered(teacherName);
-				//System.out.println("preferred:\n" + sub.toString());
 			}//end for each
 			
 			
@@ -111,41 +114,48 @@ public class Driver {
 			int userSelection = userOptions.nextInt();
 			
 			
-			if(userSelection==0) {
+			
+			switch(userSelection) {
+			case 0:
 				System.out.println("Program terminated");
 				return;
-			} else if((userSelection!=1)&&(userSelection!=2)) {
-				System.out.println("Invalid input");
-				return;
-			}
-			
-			for(Shift curAbsence : master.getAbsencesPool()) {
-				while(master.getAssignments().size()<master.getAbsencesPool().size()) {
-					Teacher teach = master.selectRandomTeacher();
-					Assignment tentativeAssignment = new Assignment(teach, curAbsence);
-					blacklist = teach.getBlacklist();
-					Scanner blacklistRead = new Scanner(blacklist);
-					blacklistRead.useDelimiter("\n");
-					boolean allowed = true;
-					//System.out.println(tentativeAssignment.getSub().getFirstName());
-					while(blacklistRead.hasNext()) {
-						if(blacklistRead.next().equals(tentativeAssignment.getAbsence().getLocation())) {
+			case 1:
+				for(Shift curAbsence : master.getAbsencesPool()) {
+					while(master.getAssignments().size()<master.getAbsencesPool().size()) {
+						Teacher teach = master.selectRandomTeacher();
+						Assignment tentativeAssignment = new Assignment(teach, curAbsence);
+						blacklist = teach.getBlacklist();
+						Scanner blacklistRead = new Scanner(blacklist);
+						blacklistRead.useDelimiter("\n");
+						boolean allowed = true;
+						//System.out.println(tentativeAssignment.getSub().getFirstName());
+						while(blacklistRead.hasNext()) {
+							if(blacklistRead.next().equals(tentativeAssignment.getAbsence().getLocation())) {
+								allowed = false;
+								break;
+							}//end if
+						}//end while
+						if(teach.binaryShiftSearch(curAbsence)) {
 							allowed = false;
 							break;
 						}//end if
+						if(allowed) {
+							tentativeAssignment.getAbsence().setToScheduled();
+							master.addAssignment(tentativeAssignment);
+							teach.assign(curAbsence);
+						}//end if
+						blacklistRead.close();
 					}//end while
-					if(teach.binaryShiftSearch(curAbsence)) {
-						allowed = false;
-						break;
-					}//end if
-					if(allowed) {
-						tentativeAssignment.getAbsence().setToScheduled();
-						master.addAssignment(tentativeAssignment);
-						teach.assign(curAbsence);
-					}//end if
-					blacklistRead.close();
-				}//end while
-			}
+				}//end for
+				break;
+			case 2:
+				System.out.println("Case 2 not yet implemented.");
+			case 3:
+				master.assignByTeachables();
+			}//end switch
+			
+			
+			
 			
 				
 			
@@ -233,10 +243,8 @@ public class Driver {
 			System.err.println
 			("EXCEPTION: Generic exception (probably can't close CSVParser or CSVPrinter) " + e.getMessage());
 			e.printStackTrace();
-		}
+		}//end catch
 		
-		//ArrayList<Shift> shifts = new ArrayList<Shift>();
-		//Teacher teacher1 = new Teacher("John", "Freeman", shifts)
-	}
+	}//end main
 
-}
+}//end Driver
